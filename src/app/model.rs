@@ -17,7 +17,7 @@ fn get_redis_client() -> Result<Connection, Error> {
 
 #[derive(Debug, Fail, Serialize)]
 pub enum UrlError {
-    #[fail(display = "expired url {}", id)] Expired { id: String },
+    #[fail(display = "Url `{}' has already expired", id)] Expired { id: String },
 }
 
 impl Url {
