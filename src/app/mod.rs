@@ -1,5 +1,6 @@
 use rocket_contrib::Template;
 use rocket::response::Redirect;
+use rocket::http::RawStr;
 
 extern crate failure;
 
@@ -20,13 +21,13 @@ fn create_url() -> Redirect {
 }
 
 #[get("/<id>")]
-fn show_url(id: String) -> Template {
-    match Url::find(id) {
+fn show_url(id: &RawStr) -> Template {
+    match Url::find(&id) {
         Ok(id) => Template::render("url", &(UrlPage { id })),
         Err(err) => Template::render(
             "expired",
             &(ExpiredPage {
-                msg: format!("{}", err),
+                msg: err.to_string(),
             }),
         ),
     }
@@ -36,8 +37,8 @@ fn show_url(id: String) -> Template {
 struct IndexContext;
 
 #[derive(Serialize)]
-struct UrlPage {
-    id: String,
+struct UrlPage<'a> {
+    id: &'a str,
 }
 
 #[derive(Serialize)]
