@@ -11,6 +11,8 @@ rocket = "*"
 rocket_codegen = "*"
 redis = "0.8.0"
 uuid = { version = "0.5.1", features = ["v4"] }
+failure = "*"
+failure_derive = "*"
 
 [dependencies.rocket_contrib]
 version = "*"

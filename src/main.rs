@@ -1,10 +1,16 @@
 #![feature(plugin, decl_macro)]
 #![plugin(rocket_codegen)]
 
-extern crate rocket;
-extern crate rocket_contrib;
+extern crate failure;
+
+#[macro_use]
+extern crate failure_derive;
+
 #[macro_use]
 extern crate serde_derive;
+
+extern crate rocket;
+extern crate rocket_contrib;
 
 use rocket_contrib::Template;
 
