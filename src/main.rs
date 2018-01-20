@@ -14,5 +14,6 @@ fn main() {
     rocket::ignite()
         .attach(Template::fairing())
         .mount("/", routes![app::index])
+        .mount("/url", routes![app::show_url, app::create_url])
         .launch();
 }
