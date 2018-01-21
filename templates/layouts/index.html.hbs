@@ -127,23 +127,42 @@
         font-family: Lucida Console, Courier, monospace;
       }
 
+      body {
+        padding-top: 5rem;
+      }
+      .starter-template {
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+
     </style>
   </head>
 
-  <body class="text-center">
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">Rusty Bin</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <form method="post" class="form-inline" action="/bins">
+            <button type="submit" class="btn btn-primary nav-link">create new bin</button>
+          </form>
+          <a class="nav-link" href="/admin">admin</a>
+        </ul>
+      </div>
+    </nav>
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <main role="main" class="inner cover">
-        {{> (template_name) context }}
-      </main>
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p>
-          saksmlz
-          </p>
-        </div>
-      </footer>
-    </div>
+    <main role="main" class="container">
+      {{> (template_name) context }}
+    </main>
+
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <p>made by saksmlz</p>
+      </div>
+    </footer>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
