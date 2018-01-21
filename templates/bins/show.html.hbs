@@ -1,5 +1,27 @@
-<header class="masthead mb-auto">
-  <div class="inner">
-    <h3 class="masthead-brand">{{ id }}</h3>
-  </div>
-</header>
+<div id="accordion" class="bg-dark">
+  {{#each dumps}}
+    <div class="card">
+      <div class="card-header" id="area-{{ @index }}">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            {{ method }} : {{ uri }} - {{ time }}
+          </button>
+        </h5>
+      </div>
+
+      <div id="collapseOne" class="collapse show" aria-labelledby="area-{{ @index }}" data-parent="#accordion">
+        <div class="card-body">
+          <h6>Headers</h6>
+          <table class="table">
+            {{#each headers}}
+              <tr>
+                <td>{{ @key }}</td>
+                <td>{{ this }}</td>
+              </tr>
+            {{/each}}
+          </table>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

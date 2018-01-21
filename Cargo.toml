@@ -13,6 +13,7 @@ redis = "0.8.0"
 uuid = { version = "0.5.1", features = ["v4"] }
 failure = "*"
 failure_derive = "*"
+time = "*"
 
 [dependencies.rocket_contrib]
 version = "*"

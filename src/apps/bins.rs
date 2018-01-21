@@ -1,14 +1,16 @@
 use rocket::response::Redirect;
 use rocket::http::RawStr;
 use rocket::Route;
+use std::path::PathBuf;
 
 use rocket_contrib::Template;
+extern crate serde_json;
 
-use models::Bin;
+use models::{Bin, Dump};
 use render_with_layout::render_with_layout;
 
 pub fn app() -> Vec<Route> {
-    routes![show, create]
+    routes![show, create, capture_get, capture_post]
 }
 
 #[post("/")]
@@ -19,6 +21,24 @@ fn create() -> Redirect {
             println!("{}", err);
             Redirect::to("/")
         }
+    }
+}
+
+#[get("/<id>/capture/<_path..>")]
+fn capture_get(id: String, _path: PathBuf, dump: Dump) -> &'static str {
+    match Bin::capture(id, dump) {
+        Ok(_) => "OK",
+        Err(_) => "expired", // TODO: respond with 404
+    }
+}
+
+#[post("/<id>/capture/<_path..>", data = "<input>")]
+fn capture_post(id: String, _path: PathBuf, mut dump: Dump, input: String) -> &'static str {
+    dump.body = Some(input);
+
+    match Bin::capture(id, dump) {
+        Ok(_) => "OK",
+        Err(_) => "expired", // TODO: respond with 404
     }
 }
 
