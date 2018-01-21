@@ -4,7 +4,7 @@ use rocket::Route;
 
 use rocket_contrib::Template;
 
-use model::Url;
+use model::Bin;
 use render_with_layout::render_with_layout;
 
 pub fn app() -> Vec<Route> {
@@ -13,7 +13,7 @@ pub fn app() -> Vec<Route> {
 
 #[post("/")]
 fn create() -> Redirect {
-    match Url::create() {
+    match Bin::create() {
         Ok(id) => Redirect::to(&format!("/bins/{}", id)),
         Err(err) => {
             println!("{}", err);
@@ -24,10 +24,8 @@ fn create() -> Redirect {
 
 #[get("/<id>")]
 fn show(id: &RawStr) -> Template {
-    let context = ShowPage { id };
-    println!("-------------> {:?} <---------------", context);
-    match Url::find(&id) {
-        Ok(id) => render_with_layout("bins/show", &context),
+    match Bin::find(&id) {
+        Ok(id) => render_with_layout("bins/show", ShowPage { id }),
         Err(err) => render_with_layout(
             "expired",
             &(ExpiredPage {

@@ -18,13 +18,13 @@ pub mod render_with_layout;
 pub mod model;
 mod app;
 mod apps;
-mod admin;
 
 fn main() {
+    // .mount("/admin", routes![admin::index])
     rocket::ignite()
         .attach(Template::fairing())
         .mount("/", routes![app::index])
         .mount("/bins", apps::bins::app())
-        .mount("/admin", routes![admin::index])
+        .mount("/admin", apps::admin::app())
         .launch();
 }

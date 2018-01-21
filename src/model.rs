@@ -10,10 +10,10 @@ use std::env;
 
 #[derive(Debug, Fail, Serialize)]
 pub enum Errors {
-    #[fail(display = "Url `{}' has already expired", id)] Expired { id: String },
+    #[fail(display = "Bin `{}' has already expired", id)] Expired { id: String },
 }
 
-pub struct Url;
+pub struct Bin;
 
 fn get_redis_client() -> Result<Connection, Error> {
     let url = env::var("REDIS_URL")?;
@@ -28,7 +28,7 @@ fn get_redis_client() -> Result<Connection, Error> {
     Ok(connection)
 }
 
-impl Url {
+impl Bin {
     pub fn create() -> Result<String, Error> {
         let redis_client = get_redis_client()?;
         let id = Uuid::new_v4().to_string();

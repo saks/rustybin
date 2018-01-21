@@ -1,0 +1,9 @@
+<h3>Existing bins</h3>
+<table class="monospace table-dark table-striped">
+  {{#each bins}}
+    <tr>
+      <td>{{ @index }}.</td>
+      <td><a href="/bins/{{ this }}">{{ this }}</a></td>
+    </tr>
+  {{/each}}
+</table>
