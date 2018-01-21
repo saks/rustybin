@@ -25,7 +25,7 @@ pub struct Bin {
     pub dumps: Vec<Dump>,
 }
 
-fn get_redis_client() -> Result<Connection, Error> {
+pub fn get_redis_client() -> Result<Connection, Error> {
     let url = env::var("REDIS_URL")?;
     let client = Client::open(url.as_str())?;
     let connection = client.get_connection()?;
@@ -80,7 +80,6 @@ impl Bin {
         let mut dumps = vec![];
 
         for data in strings.into_iter() {
-            println!("json: `{}'", data);
             if !data.is_empty() {
                 dumps.push(serde_json::from_str(&data)?);
             }
@@ -88,8 +87,6 @@ impl Bin {
 
         let mut res = Self::new(id.to_string());
         res.dumps = dumps;
-
-        println!("{:?}", &res);
 
         Ok(res)
     }
