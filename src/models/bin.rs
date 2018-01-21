@@ -13,7 +13,10 @@ pub enum Errors {
     #[fail(display = "Bin `{}' has already expired", id)] Expired { id: String },
 }
 
-pub struct Bin;
+#[derive(Serialize, Debug)]
+pub struct Bin {
+    pub id: String,
+}
 
 fn get_redis_client() -> Result<Connection, Error> {
     let url = env::var("REDIS_URL")?;
@@ -29,28 +32,34 @@ fn get_redis_client() -> Result<Connection, Error> {
 }
 
 impl Bin {
-    pub fn create() -> Result<String, Error> {
+    pub fn new(id: String) -> Self {
+        Self { id }
+    }
+
+    pub fn create() -> Result<Self, Error> {
         let redis_client = get_redis_client()?;
         let id = Uuid::new_v4().to_string();
 
         // ignore return value
         let _: () = redis_client.set_ex(&id, 42, 600)?;
 
-        Ok(id)
+        Ok(Self::new(id))
     }
 
-    pub fn find<'a>(id: &'a str) -> Result<&'a str, Error> {
+    pub fn find<'a>(id: &'a str) -> Result<Self, Error> {
         let redis_client = get_redis_client()?;
         let result = redis_client.exists(id)?;
 
         match result {
-            1 => Ok(id),
+            1 => Ok(Self::new(id.to_string())),
             _ => Err(Errors::Expired { id: id.to_string() }.into()),
         }
     }
 
-    pub fn all() -> Result<Vec<String>, Error> {
+    pub fn all() -> Result<Vec<Self>, Error> {
         let redis_client = get_redis_client()?;
-        Ok(redis_client.keys("**")?)
+        let all_keys: Vec<String> = redis_client.keys("**")?;
+
+        Ok(all_keys.into_iter().map(Self::new).collect())
     }
 }

@@ -2,7 +2,7 @@ extern crate failure;
 use self::failure::Error;
 
 use rocket::Route;
-use model::Bin;
+use models::Bin;
 
 use rocket_contrib::Template;
 
@@ -23,21 +23,21 @@ fn index() -> Template {
 
 #[derive(Serialize)]
 struct IndexPage {
-    bins: Option<Vec<String>>,
+    bins: Vec<Bin>,
     err: Option<String>,
 }
 
 impl IndexPage {
-    fn success(bins: Vec<String>) -> Self {
+    fn success(bins: Vec<Bin>) -> Self {
         Self {
-            bins: Some(bins),
+            bins: bins,
             err: None,
         }
     }
 
     fn from_err(err: Error) -> Self {
         Self {
-            bins: None,
+            bins: vec![],
             err: Some(format!("{}", err)),
         }
     }
