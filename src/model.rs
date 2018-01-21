@@ -2,6 +2,7 @@ extern crate failure;
 extern crate redis;
 extern crate uuid;
 
+use std::time::Duration;
 use self::redis::{Client, Commands, Connection};
 use self::failure::Error;
 use self::uuid::Uuid;
@@ -17,7 +18,14 @@ pub struct Url;
 fn get_redis_client() -> Result<Connection, Error> {
     let url = env::var("REDIS_URL")?;
     let client = Client::open(url.as_str())?;
-    Ok(client.get_connection()?)
+    let connection = client.get_connection()?;
+
+    let timeout = Some(Duration::from_secs(5));
+
+    connection.set_read_timeout(timeout)?;
+    connection.set_write_timeout(timeout)?;
+
+    Ok(connection)
 }
 
 impl Url {
@@ -39,5 +47,10 @@ impl Url {
             1 => Ok(id),
             _ => Err(Errors::Expired { id: id.to_string() }.into()),
         }
+    }
+
+    pub fn all() -> Result<Vec<String>, Error> {
+        let redis_client = get_redis_client()?;
+        Ok(redis_client.keys("**")?)
     }
 }

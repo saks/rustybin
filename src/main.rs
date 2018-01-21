@@ -14,12 +14,17 @@ extern crate rocket_contrib;
 
 use rocket_contrib::Template;
 
+pub mod render_with_layout;
+pub mod model;
 mod app;
+mod apps;
+mod admin;
 
 fn main() {
     rocket::ignite()
         .attach(Template::fairing())
         .mount("/", routes![app::index])
-        .mount("/url", routes![app::show_url, app::create_url])
+        .mount("/bins", apps::bins::app())
+        .mount("/admin", routes![admin::index])
         .launch();
 }
