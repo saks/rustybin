@@ -10,7 +10,7 @@ use models::{Bin, Dump};
 use render_with_layout::render_with_layout;
 
 pub fn app() -> Vec<Route> {
-    routes![show, create, capture_get, capture_post]
+    routes![show, create, capture_get, capture_post, delete]
 }
 
 #[post("/")]
@@ -53,6 +53,12 @@ fn show(id: &RawStr) -> Template {
             }),
         ),
     }
+}
+
+#[delete("/<id>")]
+fn delete(id: &RawStr) -> Redirect {
+    let _ = Bin::delete(&id);
+    Redirect::to("/admin")
 }
 
 #[derive(Serialize)]

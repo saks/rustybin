@@ -62,6 +62,12 @@ impl Bin {
         Ok(Self::new(key))
     }
 
+    pub fn delete(id: &str) -> Result<(), Error> {
+        let redis_client = get_redis_client()?;
+        let _: () = redis_client.del(id)?;
+        Ok(())
+    }
+
     pub fn find<'a>(id: &'a str) -> Result<Self, Error> {
         let redis_client = get_redis_client()?;
 

@@ -1,9 +1,15 @@
-<h3>Existing bins</h3>
+<h3 class="text-light">Existing bins</h3>
 <table class="monospace table-dark table-striped">
   {{#each bins}}
     <tr>
       <td>{{ @index }}.</td>
       <td><a href="/bins/{{ id }}">{{ id }}</a></td>
+      <td>
+        <form method="post" class="form-inline" action="/bins/{{ id }}">
+          <input type="hidden" name="_method" value="delete"></input>
+          <button type="submit" class="btn btn-link text-light">X</button>
+        </form>
+      </td>
     </tr>
   {{/each}}
 </table>
