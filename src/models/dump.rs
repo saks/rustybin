@@ -25,11 +25,30 @@ impl<'a, 'r> FromRequest<'a, 'r> for Dump {
 
         let dump = Dump {
             method: request.method().to_string(),
-            uri: String::from(&uri[50..]), // cut first 50 chars out
+            uri: String::from(&uri[37..]), // cut first 37 chars out
             headers: headers,
             body: None,
             time: time::get_time().sec,
         };
         return Outcome::Success(dump);
+    }
+}
+
+impl<'a, 'r> From<&'a Request<'r>> for Dump {
+    fn from(request: &'a Request<'r>) -> Self {
+        let uri = request.uri().as_str();
+        let mut headers = HashMap::new();
+
+        for header in request.headers().iter() {
+            headers.insert(header.name().to_string(), header.value().to_string());
+        }
+
+        Self {
+            method: request.method().to_string(),
+            uri: String::from(&uri[37..]), // cut first 37 chars out
+            headers: headers,
+            body: None,
+            time: time::get_time().sec,
+        }
     }
 }

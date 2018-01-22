@@ -3,9 +3,9 @@
   {{#each bins}}
     <tr>
       <td>{{ @index }}.</td>
-      <td><a href="/{{ id }}">{{ id }}</a></td>
+      <td><a href="/__rustybin/{{ id }}">{{ id }}</a></td>
       <td>
-        <form method="post" class="form-inline" action="/{{ id }}">
+        <form method="post" class="form-inline" action="/__rustybin/{{ id }}">
           <input type="hidden" name="_method" value="delete"></input>
           <button type="submit" class="btn btn-link text-light">X</button>
         </form>

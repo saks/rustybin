@@ -3,20 +3,19 @@ extern crate failure;
 use rocket::response::Redirect;
 use rocket::http::RawStr;
 use rocket::Route;
-use std::path::PathBuf;
 use self::failure::Error;
 
 use rocket_contrib::Template;
 extern crate serde_json;
 
-use models::{Bin, Dump};
+use models::Bin;
 use render_with_layout::render_with_layout;
 
 pub fn app() -> Vec<Route> {
-    routes![index, show, create, capture_get, capture_post, delete]
+    routes![index, show, create, delete]
 }
 
-#[get("/")]
+#[get("/", rank = 2)]
 fn index() -> Template {
     let page = match Bin::all() {
         Ok(bins) => IndexPage::success(bins),
@@ -25,10 +24,10 @@ fn index() -> Template {
     render_with_layout("bins/index", page)
 }
 
-#[post("/")]
+#[post("/", rank = 2)]
 fn create() -> Redirect {
     match Bin::create() {
-        Ok(bin) => Redirect::to(&format!("/{}", bin.id)),
+        Ok(bin) => Redirect::to(&format!("/__rustybin/{}", bin.id)),
         Err(err) => {
             println!("{}", err);
             Redirect::to("/")
@@ -36,25 +35,7 @@ fn create() -> Redirect {
     }
 }
 
-#[get("/<id>/capture/<_path..>")]
-fn capture_get(id: String, _path: PathBuf, dump: Dump) -> &'static str {
-    match Bin::capture(id, dump) {
-        Ok(_) => "OK",
-        Err(_) => "expired", // TODO: respond with 404
-    }
-}
-
-#[post("/<id>/capture/<_path..>", data = "<input>")]
-fn capture_post(id: String, _path: PathBuf, mut dump: Dump, input: String) -> &'static str {
-    dump.body = Some(input);
-
-    match Bin::capture(id, dump) {
-        Ok(_) => "OK",
-        Err(_) => "expired", // TODO: respond with 404
-    }
-}
-
-#[get("/<id>")]
+#[get("/__rustybin/<id>", rank = 2)]
 fn show(id: &RawStr) -> Template {
     match Bin::find(&id) {
         Ok(bin) => render_with_layout("bins/show", bin),
@@ -67,7 +48,7 @@ fn show(id: &RawStr) -> Template {
     }
 }
 
-#[delete("/<id>")]
+#[delete("/__rustybin/<id>", rank = 2)]
 fn delete(id: &RawStr) -> Redirect {
     let _ = Bin::delete(&id);
     Redirect::to("/")

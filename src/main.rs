@@ -9,6 +9,7 @@ use rustybin::apps;
 fn main() {
     rocket::ignite()
         .attach(Template::fairing())
+        .mount("/", apps::capture::app())
         .mount("/", apps::bins::app())
         .launch();
 }

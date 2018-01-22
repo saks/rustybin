@@ -1,16 +1,14 @@
 extern crate failure;
-extern crate redis;
 extern crate uuid;
 
-use std::time::Duration;
-use self::redis::{transaction, Client, Commands, Connection};
 use self::failure::Error;
 use self::uuid::Uuid;
-use std::env;
 
 extern crate serde_json;
 
 use models::dump::Dump;
+use models::id::Id;
+use redis::{get_redis_client, transaction, Commands};
 
 const RECORD_TTL: u16 = 6000; // seconds
 
@@ -23,19 +21,6 @@ pub enum Errors {
 pub struct Bin {
     pub id: String,
     pub dumps: Vec<Dump>,
-}
-
-pub fn get_redis_client() -> Result<Connection, Error> {
-    let url = env::var("REDIS_URL")?;
-    let client = Client::open(url.as_str())?;
-    let connection = client.get_connection()?;
-
-    let timeout = Some(Duration::from_secs(5));
-
-    connection.set_read_timeout(timeout)?;
-    connection.set_write_timeout(timeout)?;
-
-    Ok(connection)
 }
 
 impl Bin {
@@ -98,14 +83,9 @@ impl Bin {
         Ok(all_keys.into_iter().map(Self::new).collect())
     }
 
-    pub fn capture(id: String, dump: Dump) -> Result<(), Error> {
+    pub fn capture(id: Id, dump: Dump) -> Result<(), Error> {
+        let id = id.to_string();
         let redis_client = get_redis_client()?;
-
-        let result: u8 = redis_client.exists(&id)?;
-
-        if 0 == result {
-            return Err(Errors::Expired { id: id.to_string() }.into());
-        }
 
         let json = serde_json::to_string(&dump)?;
 
