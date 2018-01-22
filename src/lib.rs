@@ -14,5 +14,4 @@ extern crate rocket_contrib;
 
 mod render_with_layout;
 pub mod models;
-pub mod app;
 pub mod apps;

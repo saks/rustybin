@@ -4,13 +4,11 @@ extern crate rocket_contrib;
 use rocket_contrib::Template;
 
 extern crate rustybin;
-use rustybin::{app, apps};
+use rustybin::apps;
 
 fn main() {
     rocket::ignite()
         .attach(Template::fairing())
-        .mount("/", app::app())
-        .mount("/bins", apps::bins::app())
-        .mount("/admin", apps::admin::app())
+        .mount("/", apps::bins::app())
         .launch();
 }
