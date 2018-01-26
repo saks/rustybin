@@ -17,3 +17,6 @@ pub mod models;
 pub mod apps;
 
 pub mod redis;
+pub mod server;
+
+pub use self::server::server;

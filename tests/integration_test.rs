@@ -1,10 +1,10 @@
 extern crate rustybin;
 
 mod common;
+use rustybin::models::bin::Bin;
 
 mod all {
-    use rustybin::models::bin::Bin;
-    use common;
+    use super::*;
 
     #[test]
     fn it_should_get_all_keys_when_empty() {
@@ -25,8 +25,7 @@ mod all {
 }
 
 mod create {
-    use rustybin::models::bin::Bin;
-    use common;
+    use super::*;
 
     #[test]
     fn it_should_get_all_keys_when_empty() {
@@ -40,8 +39,7 @@ mod create {
 }
 
 mod delete {
-    use rustybin::models::bin::Bin;
-    use common;
+    use super::*;
 
     #[test]
     fn it_should_delete() {
@@ -59,8 +57,8 @@ mod delete {
 }
 
 mod find {
+    use super::*;
     use std::collections::HashMap;
-    use rustybin::models::bin::Bin;
     use rustybin::models::dump::Dump;
 
     use common;
