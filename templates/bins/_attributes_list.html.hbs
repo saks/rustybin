@@ -1,0 +1,12 @@
+{{#if items }}
+  <div class="collapse" id="collapse{{ type }}-{{ @index }}">
+    <div class="card card-body">
+      <dl>
+        {{#each items}}
+          <dt>{{ @key }}</dt>
+          <dd>{{ this }}</dd>
+        {{/each}}
+      </dl>
+    </div>
+  </div>
+{{/if}}

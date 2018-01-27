@@ -26,77 +26,15 @@
             data-parent="#accordion">
 
           <div class="card-body">
-
             <p>
-              <a class="btn btn-primary"
-                  data-toggle="collapse"
-                  href="#collapseHeaders-{{ @index }}"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="collapseHeaders-{{ @index }}">
-                Headers
-              </a>
-              {{#if url_params}}
-                <a class="btn btn-primary"
-                    data-toggle="collapse"
-                    href="#collapseUrlParams-{{ @index }}"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="collapseUrlParams-{{ @index }}">
-                  Url params
-                </a>
-              {{/if}}
-              {{#if cookies}}
-                <a class="btn btn-primary"
-                    data-toggle="collapse"
-                    href="#collapseCookies-{{ @index }}"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="collapseCookies-{{ @index }}">
-                  Cookies
-                </a>
-              {{/if}}
+              {{> bins/_attributes_link items=headers type="Headers" text="Headers" }}
+              {{> bins/_attributes_link items=url_params type="UrlParams" text="URL params" }}
+              {{> bins/_attributes_link items=cookies type="Cookies" text="Cookies" }}
             </p>
 
-            <!-- headers -->
-            <div class="collapse" id="collapseHeaders-{{ @index }}">
-              <div class="card card-body">
-                <dl>
-                  {{#each headers}}
-                    <dt>{{ @key }}</dt>
-                    <dd>{{ this }}</dd>
-                  {{/each}}
-                </dl>
-              </div>
-            </div>
-
-            {{#if url_params}}
-              <!-- url-params -->
-              <div class="collapse" id="collapseUrlParams-{{ @index }}">
-                <div class="card card-body">
-                  <dl>
-                    {{#each url_params}}
-                      <dt>{{ @key }}</dt>
-                      <dd>{{ this }}</dd>
-                    {{/each}}
-                  </dl>
-                </div>
-              </div>
-            {{/if}}
-
-            {{#if cookies}}
-              <!-- cookies -->
-              <div class="collapse" id="collapseCookies-{{ @index }}">
-                <div class="card card-body">
-                  <dl>
-                    {{#each cookies}}
-                      <dt>{{ @key }}</dt>
-                      <dd>{{ this }}</dd>
-                    {{/each}}
-                  </dl>
-                </div>
-              </div>
-            {{/if}}
+            {{> bins/_attributes_list items=headers    type="Headers"   }}
+            {{> bins/_attributes_list items=url_params type="UrlParams" }}
+            {{> bins/_attributes_list items=cookies    type="Cookies"   }}
 
           </div>
         </div>
