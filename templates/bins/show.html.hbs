@@ -1,3 +1,8 @@
+<div class="py-3 text-center">
+  ID: {{ id }}
+  <div class="pull-right">{{> bins/_copy_button id }}</div>
+</div>
+
 {{#if dumps}}
   <div id="accordion">
     {{#each dumps}}
@@ -56,14 +61,12 @@
             <!-- headers -->
             <div class="collapse" id="collapseHeaders-{{ @index }}">
               <div class="card card-body">
-                <table class="table">
+                <dl>
                   {{#each headers}}
-                    <tr>
-                      <td>{{ @key }}</td>
-                      <td>{{ this }}</td>
-                    </tr>
+                    <dt>{{ @key }}</dt>
+                    <dd>{{ this }}</dd>
                   {{/each}}
-                </table>
+                </dl>
               </div>
             </div>
 
@@ -71,14 +74,12 @@
               <!-- url-params -->
               <div class="collapse" id="collapseUrlParams-{{ @index }}">
                 <div class="card card-body">
-                  <table class="table">
+                  <dl>
                     {{#each url_params}}
-                      <tr>
-                        <td>{{ @key }}</td>
-                        <td>{{ this }}</td>
-                      </tr>
+                      <dt>{{ @key }}</dt>
+                      <dd>{{ this }}</dd>
                     {{/each}}
-                  </table>
+                  </dl>
                 </div>
               </div>
             {{/if}}
@@ -87,14 +88,12 @@
               <!-- cookies -->
               <div class="collapse" id="collapseCookies-{{ @index }}">
                 <div class="card card-body">
-                  <table class="table">
+                  <dl>
                     {{#each cookies}}
-                      <tr>
-                        <td>{{ @key }}</td>
-                        <td>{{ this }}</td>
-                      </tr>
+                      <dt>{{ @key }}</dt>
+                      <dd>{{ this }}</dd>
                     {{/each}}
-                  </table>
+                  </dl>
                 </div>
               </div>
             {{/if}}

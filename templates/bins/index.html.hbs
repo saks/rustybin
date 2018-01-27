@@ -15,9 +15,7 @@
           <a href="/__rustybin/{{ id }}">{{ id }}</a>
         </td>
         <td>
-          <button class="btn btn-link copy" data-id="{{ id }}">
-            <i class="fa fa-clipboard" aria-hidden="true"></i>
-          </button>
+          {{> bins/_copy_button id }}
         </td>
         <td>
           <form method="post" class="form-inline" action="/__rustybin/{{ id }}">
