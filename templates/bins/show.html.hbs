@@ -1,36 +1,40 @@
-<div id="accordion">
-  {{#each dumps}}
-    <div class="card">
-      <div class="card-header" id="heading-{{ @index }}">
-        <h5 class="mb-0">
-          <button class="btn btn-link collapsed"
-              data-toggle="collapse"
-              data-target="#collapse{{ @index }}"
-              aria-expanded="false"
-              aria-controls="collapse{{ @index }}">
+{{#if dumps}}
+  <div id="accordion">
+    {{#each dumps}}
+      <div class="card">
+        <div class="card-header" id="heading-{{ @index }}">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapse{{ @index }}"
+                aria-expanded="false"
+                aria-controls="collapse{{ @index }}">
 
-            {{ method }} : {{ uri }} - {{ time }}
-          </button>
-        </h5>
-      </div>
+              {{ method }} : {{ uri }} - {{ time }}
+            </button>
+          </h5>
+        </div>
 
-      <div id="collapse{{ @index }}"
-          class="collapse"
-          aria-labelledby="heading-{{ @index }}"
-          data-parent="#accordion">
+        <div id="collapse{{ @index }}"
+            class="collapse"
+            aria-labelledby="heading-{{ @index }}"
+            data-parent="#accordion">
 
-        <div class="card-body">
-          <h6>Headers</h6>
-          <table class="table">
-            {{#each headers}}
-              <tr>
-                <td>{{ @key }}</td>
-                <td>{{ this }}</td>
-              </tr>
-            {{/each}}
-          </table>
+          <div class="card-body">
+            <h6>Headers</h6>
+            <table class="table">
+              {{#each headers}}
+                <tr>
+                  <td>{{ @key }}</td>
+                  <td>{{ this }}</td>
+                </tr>
+              {{/each}}
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  {{/each}}
-</div>
+    {{/each}}
+  </div>
+{{else}}
+  No requests yet...
+{{/if}}

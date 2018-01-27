@@ -9,7 +9,14 @@ pub struct Dump {
     pub uri: String,
     pub headers: HashMap<String, String>,
     pub body: Option<String>,
-    pub time: i64,
+    pub time: String,
+}
+
+fn time_str() -> String {
+    let now = time::get_time();
+    let utc = time::at_utc(now);
+    let tm = utc.rfc3339();
+    format!("{}", tm)
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for Dump {
@@ -20,7 +27,8 @@ impl<'a, 'r> FromRequest<'a, 'r> for Dump {
         let mut headers = HashMap::new();
 
         for header in request.headers().iter() {
-            headers.insert(header.name().to_string(), header.value().to_string());
+            headers
+                .insert(header.name().to_string(), header.value().to_string());
         }
 
         let dump = Dump {
@@ -28,7 +36,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for Dump {
             uri: String::from(&uri[37..]), // cut first 37 chars out
             headers: headers,
             body: None,
-            time: time::get_time().sec,
+            time: time_str(),
         };
         return Outcome::Success(dump);
     }
@@ -40,7 +48,8 @@ impl<'a, 'r> From<&'a Request<'r>> for Dump {
         let mut headers = HashMap::new();
 
         for header in request.headers().iter() {
-            headers.insert(header.name().to_string(), header.value().to_string());
+            headers
+                .insert(header.name().to_string(), header.value().to_string());
         }
 
         Self {
@@ -48,7 +57,7 @@ impl<'a, 'r> From<&'a Request<'r>> for Dump {
             uri: String::from(&uri[37..]), // cut first 37 chars out
             headers: headers,
             body: None,
-            time: time::get_time().sec,
+            time: time_str(),
         }
     }
 }
