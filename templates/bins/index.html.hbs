@@ -4,6 +4,7 @@
       <th>#</th>
       <th>id</th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -14,10 +15,15 @@
           <a href="/__rustybin/{{ id }}">{{ id }}</a>
         </td>
         <td>
+          <button class="btn btn-link copy" data-id="{{ id }}">
+            <i class="fa fa-clipboard" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td>
           <form method="post" class="form-inline" action="/__rustybin/{{ id }}">
             <input type="hidden" name="_method" value="delete"></input>
             <button type="submit" class="btn btn-link">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
+              <i class="fa fa-trash" aria-hidden="true"></i>
             </button>
           </form>
         </td>
