@@ -7,6 +7,7 @@ use apps;
 pub fn server() -> rocket::Rocket {
     rocket::ignite()
         .attach(Template::fairing())
+        .mount("/static", apps::static_files::app())
         .mount("/", apps::capture::app())
         .mount("/", apps::bins::app())
 }

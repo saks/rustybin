@@ -27,7 +27,7 @@ fn index() -> Template {
 #[post("/", rank = 2)]
 fn create() -> Redirect {
     match Bin::create() {
-        Ok(bin) => Redirect::to(&format!("/__rustybin/{}", bin.id)),
+        Ok(_bin) => Redirect::to("/"),
         Err(err) => {
             println!("{}", err);
             Redirect::to("/")

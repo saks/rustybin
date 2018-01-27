@@ -1,166 +1,50 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!DOCTYPE html>
+<html>
 
-    <title>Rusty Bin App</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/static/theme.css" type="text/css"> </head>
+  <title>Rusty::Bin</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Custom styles for this template -->
-    <style>
-      /*
-       * Globals
-       */
-
-      /* Links */
-      a,
-      a:focus,
-      a:hover {
-        color: #fff;
-      }
-
-      /* Custom default button */
-      .btn-secondary,
-      .btn-secondary:hover,
-      .btn-secondary:focus {
-        color: #333;
-        text-shadow: none; /* Prevent inheritance from `body` */
-        background-color: #fff;
-        border: .05rem solid #fff;
-      }
-
-
-      /*
-       * Base structure
-       */
-
-      html,
-      body {
-        height: 100%;
-        background-color: #333;
-      }
-
-      body {
-        display: -ms-flexbox;
-        display: -webkit-box;
-        display: flex;
-        -ms-flex-pack: center;
-        -webkit-box-pack: center;
-        justify-content: center;
-        /* color: #fff; */
-        /* text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5); */
-        box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-      }
-
-      .cover-container {
-        max-width: 42em;
-      }
-
-
-      /*
-       * Header
-       */
-      .masthead {
-        margin-bottom: 2rem;
-      }
-
-      .masthead-brand {
-        margin-bottom: 0;
-      }
-
-      .nav-masthead .nav-link {
-        padding: .25rem 0;
-        font-weight: 700;
-        color: rgba(255, 255, 255, .5);
-        background-color: transparent;
-        border-bottom: .25rem solid transparent;
-      }
-
-      .nav-masthead .nav-link:hover,
-      .nav-masthead .nav-link:focus {
-        border-bottom-color: rgba(255, 255, 255, .25);
-      }
-
-      .nav-masthead .nav-link + .nav-link {
-        margin-left: 1rem;
-      }
-
-      .nav-masthead .active {
-        color: #fff;
-        border-bottom-color: #fff;
-      }
-
-      @media (min-width: 48em) {
-        .masthead-brand {
-          float: left;
-        }
-        .nav-masthead {
-          float: right;
-        }
-      }
-
-
-      /*
-       * Cover
-       */
-      .cover {
-        padding: 0 1.5rem;
-      }
-      .cover .btn-lg {
-        padding: .75rem 1.25rem;
-        font-weight: 700;
-      }
-
-
-      /*
-       * Footer
-       */
-      .mastfoot {
-        color: rgba(255, 255, 255, .5);
-      }
-
-      .monospace {
-        font-family: Lucida Console, Courier, monospace;
-      }
-
-      body {
-        padding-top: 5rem;
-      }
-      .starter-template {
-        padding: 3rem 1.5rem;
-        text-align: center;
-      }
-
-    </style>
-  </head>
-
-  <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="/">Rusty Bin</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <form method="post" class="form-inline" action="/">
-            <button type="submit" class="btn btn-primary nav-link">create new bin</button>
-          </form>
-          <a class="nav-link" href="/">list</a>
+<body class="w-100 h-100">
+  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <div class="container">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+      <a class="navbar-brand" href="/">Rusty::Bin</a>
+      <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
+        <!---
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa d-inline fa-lg fa-bookmark-o"></i> Bookmarks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa d-inline fa-lg fa-envelope-o"></i> Contacts</a>
+          </li>
         </ul>
+        -->
+        <form method="post" class="form-inline" action="/">
+          <button type="submit" class="btn btn-primary nav-link">
+            <i class="fa d-inline fa-lg fa-plus"></i>Create New Bin
+          </button>
+        </form>
+
       </div>
-    </nav>
+    </div>
+  </nav>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12" style="font-family:monospace;">
+          {{> (template_name) context }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
 
-    <main role="main" class="container">
-      {{> (template_name) context }}
-    </main>
-
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
 </html>
