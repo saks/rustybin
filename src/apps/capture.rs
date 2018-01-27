@@ -12,8 +12,10 @@ use rocket::http::Status;
 fn capture(request: &Request, data: Data) -> Outcome<'static> {
     let id = Id::from(request);
     if id.is_valid() {
-        let dump = Dump::from(request);
         if id.check_fresh().is_ok() {
+            let mut dump = Dump::from(request);
+            dump.add_data(&data);
+
             match Bin::capture(id, dump) {
                 Ok(_) => Outcome::from(request, "OK"),
                 Err(_) => Outcome::failure(Status::BadRequest),
@@ -27,7 +29,7 @@ fn capture(request: &Request, data: Data) -> Outcome<'static> {
 }
 
 pub fn app() -> Vec<Route> {
-    [Get, Post]
+    [Get, Post, Put, Patch, Head, Delete]
         .into_iter()
         .map(|method| Route::ranked(10, *method, "/<path..>", capture))
         .collect()

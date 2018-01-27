@@ -1,6 +1,7 @@
 extern crate time;
 extern crate url;
 
+use rocket::Data;
 use rocket::request::Request;
 use std::collections::HashMap;
 use self::url::Url;
@@ -13,7 +14,14 @@ pub struct Dump {
     pub url_params: HashMap<String, String>,
     pub cookies: HashMap<String, String>,
     pub body: Option<String>,
+    pub body_params: Option<HashMap<String, String>>,
     pub time: String,
+}
+
+impl Dump {
+    pub fn add_data(&mut self, data: &Data) {
+        self.body = Some(String::from_utf8_lossy(data.peek()).to_string());
+    }
 }
 
 fn time_str() -> String {
@@ -67,6 +75,7 @@ impl<'a, 'r> From<&'a Request<'r>> for Dump {
             url_params: url_params(&request),
             cookies: cookies(&request),
             body: None,
+            body_params: None,
             time: time_str(),
         }
     }

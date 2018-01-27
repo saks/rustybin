@@ -30,11 +30,20 @@
               {{> bins/_attributes_link items=headers type="Headers" text="Headers" }}
               {{> bins/_attributes_link items=url_params type="UrlParams" text="URL params" }}
               {{> bins/_attributes_link items=cookies type="Cookies" text="Cookies" }}
+              {{> bins/_attributes_link items=body type="Body" text="Body" }}
             </p>
 
             {{> bins/_attributes_list items=headers    type="Headers"   }}
             {{> bins/_attributes_list items=url_params type="UrlParams" }}
             {{> bins/_attributes_list items=cookies    type="Cookies"   }}
+
+            {{#if body }}
+              <div class="collapse" id="collapseBody-{{ @index }}">
+                <div class="card card-body">
+                  {{ body }}
+                </div>
+              </div>
+            {{/if}}
 
           </div>
         </div>
