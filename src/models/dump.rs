@@ -11,6 +11,7 @@ pub struct Dump {
     pub uri: String,
     pub headers: HashMap<String, String>,
     pub url_params: HashMap<String, String>,
+    pub cookies: HashMap<String, String>,
     pub body: Option<String>,
     pub time: String,
 }
@@ -22,28 +23,49 @@ fn time_str() -> String {
     utc.rfc3339().to_string()
 }
 
+fn url_params<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+    let mut url_params = HashMap::new();
+
+    let uri = "http://a.b/".to_string() + request.uri().as_str();
+
+    if let Ok(parsed_uri) = Url::parse(&uri) {
+        for (key, value) in parsed_uri.query_pairs() {
+            url_params.insert(key.into(), value.into());
+        }
+    }
+
+    url_params
+}
+
+fn headers<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+    let mut headers = HashMap::new();
+
+    for header in request.headers().iter() {
+        headers.insert(header.name().to_string(), header.value().to_string());
+    }
+
+    headers
+}
+
+fn cookies<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+    let mut result = HashMap::new();
+    let cookies_obj = request.cookies();
+
+    for c in cookies_obj.iter() {
+        result.insert(c.name().to_string(), c.value().to_string());
+    }
+
+    result
+}
+
 impl<'a, 'r> From<&'a Request<'r>> for Dump {
     fn from(request: &'a Request<'r>) -> Self {
-        let mut headers = HashMap::new();
-
-        for header in request.headers().iter() {
-            headers
-                .insert(header.name().to_string(), header.value().to_string());
-        }
-
-        let mut url_params = HashMap::new();
-        let uri = "http://abc.com/".to_string() + request.uri().as_str();
-        if let Ok(parsed_uri) = Url::parse(&uri) {
-            for (key, value) in parsed_uri.query_pairs() {
-                url_params.insert(key.into(), value.into());
-            }
-        }
-
         Self {
             method: request.method().to_string(),
             uri: String::from(&request.uri().path()[37..]), // cut first 37 chars out
-            headers: headers,
-            url_params: url_params,
+            headers: headers(&request),
+            url_params: url_params(&request),
+            cookies: cookies(&request),
             body: None,
             time: time_str(),
         }

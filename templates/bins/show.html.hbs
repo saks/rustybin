@@ -41,6 +41,16 @@
                   Url params
                 </a>
               {{/if}}
+              {{#if cookies}}
+                <a class="btn btn-primary"
+                    data-toggle="collapse"
+                    href="#collapseCookies-{{ @index }}"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseCookies-{{ @index }}">
+                  Cookies
+                </a>
+              {{/if}}
             </p>
 
             <!-- headers -->
@@ -63,6 +73,22 @@
                 <div class="card card-body">
                   <table class="table">
                     {{#each url_params}}
+                      <tr>
+                        <td>{{ @key }}</td>
+                        <td>{{ this }}</td>
+                      </tr>
+                    {{/each}}
+                  </table>
+                </div>
+              </div>
+            {{/if}}
+
+            {{#if cookies}}
+              <!-- cookies -->
+              <div class="collapse" id="collapseCookies-{{ @index }}">
+                <div class="card card-body">
+                  <table class="table">
+                    {{#each cookies}}
                       <tr>
                         <td>{{ @key }}</td>
                         <td>{{ this }}</td>
