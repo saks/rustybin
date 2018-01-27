@@ -21,15 +21,54 @@
             data-parent="#accordion">
 
           <div class="card-body">
-            <h6>Headers</h6>
-            <table class="table">
-              {{#each headers}}
-                <tr>
-                  <td>{{ @key }}</td>
-                  <td>{{ this }}</td>
-                </tr>
-              {{/each}}
-            </table>
+
+            <p>
+              <a class="btn btn-primary"
+                  data-toggle="collapse"
+                  href="#collapseHeaders-{{ @index }}"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="collapseHeaders-{{ @index }}">
+                Headers
+              </a>
+              <a class="btn btn-primary"
+                  data-toggle="collapse"
+                  href="#collapseUrlParams-{{ @index }}"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="collapseUrlParams-{{ @index }}">
+                Url params
+              </a>
+            </p>
+
+            <!-- headers -->
+            <div class="collapse" id="collapseHeaders-{{ @index }}">
+              <div class="card card-body">
+                <table class="table">
+                  {{#each headers}}
+                    <tr>
+                      <td>{{ @key }}</td>
+                      <td>{{ this }}</td>
+                    </tr>
+                  {{/each}}
+                </table>
+              </div>
+            </div>
+
+            <!-- url-params -->
+            <div class="collapse" id="collapseUrlParams-{{ @index }}">
+              <div class="card card-body">
+                <table class="table">
+                  {{#each url_params}}
+                    <tr>
+                      <td>{{ @key }}</td>
+                      <td>{{ this }}</td>
+                    </tr>
+                  {{/each}}
+                </table>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
