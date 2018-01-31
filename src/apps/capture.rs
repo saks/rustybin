@@ -16,7 +16,7 @@ fn capture(request: &Request, data: Data) -> Outcome<'static> {
             let mut dump = Dump::from(request);
             dump.add_data(&data);
 
-            match Bin::capture(id, dump) {
+            match Bin::capture(&id, &dump) {
                 Ok(_) => Outcome::from(request, "OK"),
                 Err(_) => Outcome::failure(Status::BadRequest),
             }

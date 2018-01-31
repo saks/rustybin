@@ -19,7 +19,7 @@ pub fn app() -> Vec<Route> {
 fn index() -> Template {
     let page = match Bin::all() {
         Ok(bins) => IndexPage::success(bins),
-        Err(err) => IndexPage::from_err(err),
+        Err(err) => IndexPage::from_err(&err),
     };
     render_with_layout("bins/index", page)
 }
@@ -37,7 +37,7 @@ fn create() -> Redirect {
 
 #[get("/__rustybin/<id>", rank = 2)]
 fn show(id: &RawStr) -> Template {
-    match Bin::find(&id) {
+    match Bin::find(id) {
         Ok(bin) => render_with_layout("bins/show", bin),
         Err(err) => render_with_layout(
             "expired",
@@ -50,7 +50,7 @@ fn show(id: &RawStr) -> Template {
 
 #[delete("/__rustybin/<id>", rank = 2)]
 fn delete(id: &RawStr) -> Redirect {
-    let _ = Bin::delete(&id);
+    let _ = Bin::delete(id);
     Redirect::to("/")
 }
 
@@ -73,7 +73,7 @@ impl IndexPage {
         }
     }
 
-    fn from_err(err: Error) -> Self {
+    fn from_err(err: &Error) -> Self {
         Self {
             bins: vec![],
             err: Some(format!("{}", err)),

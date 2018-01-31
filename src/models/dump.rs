@@ -31,7 +31,7 @@ fn time_str() -> String {
     utc.rfc3339().to_string()
 }
 
-fn url_params<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+fn url_params(request: &Request) -> HashMap<String, String> {
     let mut url_params = HashMap::new();
 
     let uri = "http://a.b/".to_string() + request.uri().as_str();
@@ -45,7 +45,7 @@ fn url_params<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
     url_params
 }
 
-fn headers<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+fn headers(request: &Request) -> HashMap<String, String> {
     let mut headers = HashMap::new();
 
     for header in request.headers().iter() {
@@ -55,7 +55,7 @@ fn headers<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
     headers
 }
 
-fn cookies<'a, 'r>(request: &'a Request<'r>) -> HashMap<String, String> {
+fn cookies(request: &Request) -> HashMap<String, String> {
     let mut result = HashMap::new();
     let cookies_obj = request.cookies();
 

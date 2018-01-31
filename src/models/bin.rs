@@ -14,7 +14,8 @@ const RECORD_TTL: u16 = 6000; // seconds
 
 #[derive(Debug, Fail, Serialize)]
 pub enum Errors {
-    #[fail(display = "Bin `{}' has already expired", id)] Expired { id: String },
+    #[fail(display = "Bin `{}' has already expired", id)]
+    Expired { id: String },
 }
 
 #[derive(Serialize, Debug)]
@@ -53,7 +54,7 @@ impl Bin {
         Ok(())
     }
 
-    pub fn find<'a>(id: &'a str) -> Result<Self, Error> {
+    pub fn find(id: &str) -> Result<Self, Error> {
         let redis_client = get_redis_client()?;
 
         let exist_res: u8 = redis_client.exists(id)?;
@@ -64,7 +65,7 @@ impl Bin {
         let strings: Vec<String> = redis_client.lrange(id, 0, 10)?;
         let mut dumps = vec![];
 
-        for data in strings.into_iter() {
+        for data in strings {
             if !data.is_empty() {
                 dumps.push(serde_json::from_str(&data)?);
             }
@@ -83,7 +84,7 @@ impl Bin {
         Ok(all_keys.into_iter().map(Self::new).collect())
     }
 
-    pub fn capture(id: Id, dump: Dump) -> Result<(), Error> {
+    pub fn capture(id: &Id, dump: &Dump) -> Result<(), Error> {
         let id = id.to_string();
         let redis_client = get_redis_client()?;
 
