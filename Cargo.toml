@@ -4,12 +4,12 @@ version = "0.1.0"
 authors = ["Aliaksandr Rahalevich <saksmlz@gmail.com>"]
 
 [dependencies]
-serde = "1.0"
-serde_derive = "1.0"
-serde_json = "1.0"
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
 rocket = "*"
 rocket_codegen = "*"
-redis = "0.8.0"
+redis = "*"
 uuid = { version = "0.5.1", features = ["v4"] }
 failure = "*"
 failure_derive = "*"
