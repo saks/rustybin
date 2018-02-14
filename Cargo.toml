@@ -40,6 +40,3 @@ version = "*"
 default-features = false
 features = ["handlebars_templates"]
 optional = true
-
-[build-dependencies]
-cargo-web = "*"
