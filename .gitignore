@@ -1,3 +1,4 @@
 
 /target/
+/static/js/application.*
 **/*.rs.bk
