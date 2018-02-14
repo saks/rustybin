@@ -3,20 +3,43 @@ name = "rustybin"
 version = "0.1.0"
 authors = ["Aliaksandr Rahalevich <saksmlz@gmail.com>"]
 
-[dependencies]
-serde = "*"
-serde_derive = "*"
+[features]
+
+default = ["server"]
+
+server = ["rocket_contrib"]
+
+[[bin]]
+name = "rustybin"
+path = "src/main.rs"
+
+[[bin]]
+name = "application"
+path = "js_src/main.rs"
+
+[target.wasm32-unknown-unknown.dependencies]
+stdweb = { git = "https://github.com/koute/stdweb.git", rev = "5a2e57dc61db5ed13cf6f12ce53dc171905cd639" }
+
+[target.x86_64-unknown-linux-gnu.dependencies]
 serde_json = "*"
 rocket = "*"
 rocket_codegen = "*"
 redis = "*"
 uuid = { version = "0.5.1", features = ["v4"] }
-failure = "*"
-failure_derive = "*"
 time = "*"
 url = "*"
 
-[dependencies.rocket_contrib]
+[dependencies]
+serde = "*"
+serde_derive = "*"
+failure = "*"
+failure_derive = "*"
+
+[target.x86_64-unknown-linux-gnu.dependencies.rocket_contrib]
 version = "*"
 default-features = false
 features = ["handlebars_templates"]
+optional = true
+
+[build-dependencies]
+cargo-web = "*"

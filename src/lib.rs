@@ -1,3 +1,4 @@
+#![cfg(feature = "server")]
 #![feature(plugin, decl_macro)]
 #![plugin(rocket_codegen)]
 
