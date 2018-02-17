@@ -98,8 +98,10 @@ fn url_with_id(id: &str) -> Result<String, Error> {
 
 #[derive(Debug, Fail)]
 enum PageError {
-    #[fail(display = "copy error")] CopyError,
-    #[fail(display = "no body on the page")] BodyError,
+    #[fail(display = "copy error")]
+    CopyError,
+    #[fail(display = "no body on the page")]
+    BodyError,
 }
 
 fn copy(e: ClickEvent) -> Result<(), Error> {
