@@ -123,7 +123,7 @@ fn do_all_stuff() -> Result<(), Error> {
         btn.add_event_listener(move |e: ClickEvent| match copy(e) {
             Ok(_) => {}
             Err(e) => {
-                println!("{:?}", e);
+                console!(log, format!("{:?}", e));
             }
         });
     }
