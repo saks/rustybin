@@ -18,7 +18,7 @@ name = "application"
 path = "js_src/main.rs"
 
 [target.wasm32-unknown-unknown.dependencies]
-stdweb = { git = "https://github.com/koute/stdweb.git", rev = "5a2e57dc61db5ed13cf6f12ce53dc171905cd639" }
+stdweb = { git = "https://github.com/koute/stdweb.git", rev = "f0206e6c0faa7871d9d27008f92f33cc82ec7046" }
 
 [target.x86_64-unknown-linux-gnu.dependencies]
 serde_json = "*"
