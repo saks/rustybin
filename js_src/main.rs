@@ -105,7 +105,7 @@ enum PageError {
 }
 
 fn copy(e: ClickEvent) -> Result<(), Error> {
-    let button: HtmlElement = match e.target() {
+    let button: HtmlElement = match e.current_target() {
         Some(node) => node.try_into().unwrap(),
         None => return Err(PageError::CopyError {}.into()),
     };
