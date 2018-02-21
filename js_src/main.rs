@@ -32,7 +32,7 @@ fn select_fake(text: &str) -> Result<(), Error> {
     let textarea = d.create_element("textarea")
         .map_err(|_| -> Error { PageError::NoTextareaCreated {}.into() })?;
 
-    js! {
+    js! { @(no_return)
         // Prevent zooming on iOS
         @{&textarea}.style.fontSize = "12pt";
         // Reset box model
@@ -40,7 +40,7 @@ fn select_fake(text: &str) -> Result<(), Error> {
         @{&textarea}.style.padding = "0";
         @{&textarea}.style.margin = "0";
     }
-    js! {
+    js! { @(no_return)
         // Move element out of screen horizontally
         @{&textarea}.style.position = "absolute";
         @{&textarea}.style.left = "-9999px";
@@ -57,7 +57,7 @@ fn select_fake(text: &str) -> Result<(), Error> {
         .unwrap() // selector syntax error
         .map(|body| {
             body.append_child(&textarea);
-            js!{
+            js!{ @(no_return)
                 @{textarea}.select();
                 document.execCommand("copy");
                 window.getSelection().removeAllRanges();
