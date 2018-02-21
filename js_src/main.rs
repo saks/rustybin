@@ -6,42 +6,31 @@ extern crate serde;
 
 #[macro_use]
 extern crate failure_derive;
-// #[macro_use]
-// extern crate serde_derive;
 
 use failure::Error;
 
 use stdweb::unstable::TryInto;
-use stdweb::web::{document, window, HtmlElement, IEventTarget, IHtmlElement,
-                  INode, IParentNode};
+use stdweb::web::{document, window, EventTarget, HtmlElement, IEventTarget,
+                  IHtmlElement, INode, IParentNode, Node};
 
 use stdweb::web::event::{ClickEvent, IEvent};
-// Shamelessly stolen from webplatform's TodoMVC example.
-// macro_rules! enclose {
-//     ( ($( $x:ident ),*) $y:expr ) => {
-//         {
-//             $(let $x = $x.clone();)*
-//             $y
-//         }
-//     };
-// }
 
-// use stdweb::private::UnimplementedException;
-// use failure::{Backtrace, Fail};
-
-// impl Fail for UnimplementedException {
-//     fn cause(&self) -> Option<&Fail> {
-//         self.inner.cause()
-//     }
-//
-//     fn backtrace(&self) -> Option<&Backtrace> {
-//         self.inner.backtrace()
-//     }
-// }
+#[derive(Debug, Fail)]
+enum PageError {
+    #[fail(display = "no body on the page")]
+    BodyError,
+    #[fail(display = "no location object available")]
+    NoLocationError,
+    #[fail(display = "click taret data does not contain key `{}'", key)]
+    MissingDataKey { key: &'static str },
+    #[fail(display = "cannot create textarea node")]
+    NoTextareaCreated,
+}
 
 fn select_fake(text: &str) -> Result<(), Error> {
     let d = document();
-    let textarea = d.create_element("textarea").unwrap(); // UnimplementedException
+    let textarea = d.create_element("textarea")
+        .map_err(|_| -> Error { PageError::NoTextareaCreated {}.into() })?;
 
     js! {
         // Prevent zooming on iOS
@@ -64,74 +53,73 @@ fn select_fake(text: &str) -> Result<(), Error> {
 
     textarea.set_text_content(text);
 
-    let body_result = d.query_selector("body").unwrap(); // UnimplementedException
-
-    match body_result {
-        Some(body) => {
+    d.query_selector("body")
+        .unwrap() // selector syntax error
+        .map(|body| {
             body.append_child(&textarea);
             js!{
                 @{textarea}.select();
                 document.execCommand("copy");
                 window.getSelection().removeAllRanges();
             };
-        }
-        None => return Err(PageError::BodyError {}.into()),
-    }
-
-    return Ok(());
+            Ok(())
+        })
+        .ok_or_else(|| -> Error { PageError::BodyError {}.into() })?
 }
 
 fn url_with_id(id: &str) -> Result<String, Error> {
-    let location = window().location().unwrap();
+    let location = window()
+        .location()
+        .ok_or_else(|| -> Error { PageError::NoLocationError {}.into() })?;
     let protocol: String = js!(return @{&location}.protocol).try_into()?;
     let host: String = js!(return @{&location}.host).try_into()?;
 
-    let ret: String = format!(
+    Ok(format!(
         "{protocol}//{host}/{id}",
         protocol = protocol,
         host = host,
         id = id
-    );
-
-    Ok(ret)
+    ))
 }
 
-#[derive(Debug, Fail)]
-enum PageError {
-    #[fail(display = "copy error")]
-    CopyError,
-    #[fail(display = "no body on the page")]
-    BodyError,
+fn dataset_key(
+    button: HtmlElement,
+    key: &'static str,
+) -> Result<String, Error> {
+    let dataset = button.dataset();
+
+    dataset
+        .get(key)
+        .ok_or_else(|| PageError::MissingDataKey { key }.into())
 }
 
 fn copy(e: ClickEvent) -> Result<(), Error> {
-    let button: HtmlElement = match e.current_target() {
-        Some(node) => node.try_into().unwrap(),
-        None => return Err(PageError::CopyError {}.into()),
-    };
+    let target: EventTarget = e.current_target().expect("no click target!");
+    let button: HtmlElement = target.try_into()?;
 
-    let id: String = button.dataset().get("id").unwrap();
-    let ret = url_with_id(&id).unwrap();
-    select_fake(&ret)?;
+    let id = dataset_key(button, "id")?;
+    let url = url_with_id(&id)?;
+    select_fake(&url)?;
     Ok(())
 }
 
-fn do_all_stuff() -> Result<(), Error> {
-    let buttons = document().query_selector_all(".copy").unwrap();
+fn click(e: ClickEvent) {
+    copy(e).unwrap_or_else(|err| console!(log, format!("{}", err)));
+}
 
-    for btn in buttons {
-        btn.add_event_listener(move |e: ClickEvent| match copy(e) {
-            Ok(_) => {}
-            Err(e) => {
-                console!(log, format!("{:?}", e));
-            }
-        });
-    }
+fn bind(button: Node) {
+    button.add_event_listener(click);
+}
 
-    Ok(())
+fn do_all_stuff() {
+    document()
+        .query_selector_all(".copy")
+        .unwrap() // selector syntax error
+        .into_iter()
+        .for_each(bind);
 }
 
 fn main() {
     stdweb::initialize();
-    do_all_stuff().unwrap();
+    do_all_stuff();
 }
