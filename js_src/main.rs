@@ -15,6 +15,18 @@ use stdweb::web::{document, window, EventTarget, HtmlElement, IEventTarget,
 
 use stdweb::web::event::{ClickEvent, IEvent};
 
+macro_rules! page_err {
+    ($error_variant:ident) => (
+        || -> Error { PageError::$error_variant {}.into() }
+    )
+}
+
+macro_rules! map_page_err {
+    ($error_variant:ident) => (
+        |_e| -> Error { PageError::$error_variant {}.into() }
+    )
+}
+
 #[derive(Debug, Fail)]
 enum PageError {
     #[fail(display = "no body on the page")]
@@ -30,7 +42,7 @@ enum PageError {
 fn select_fake(text: &str) -> Result<(), Error> {
     let d = document();
     let textarea = d.create_element("textarea")
-        .map_err(|_| -> Error { PageError::NoTextareaCreated {}.into() })?;
+        .map_err(map_page_err!(NoTextareaCreated))?;
 
     js! { @(no_return)
         // Prevent zooming on iOS
@@ -64,13 +76,11 @@ fn select_fake(text: &str) -> Result<(), Error> {
             };
             Ok(())
         })
-        .ok_or_else(|| -> Error { PageError::BodyError {}.into() })?
+        .ok_or_else(page_err!(BodyError))?
 }
 
 fn url_with_id(id: &str) -> Result<String, Error> {
-    let location = window()
-        .location()
-        .ok_or_else(|| -> Error { PageError::NoLocationError {}.into() })?;
+    let location = window().location().ok_or_else(page_err!(NoLocationError))?;
     let protocol: String = js!(return @{&location}.protocol).try_into()?;
     let host: String = js!(return @{&location}.host).try_into()?;
 
