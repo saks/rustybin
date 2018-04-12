@@ -16,6 +16,7 @@ pub struct Dump {
     pub body: Option<String>,
     pub body_params: Option<HashMap<String, String>>,
     pub time: String,
+    pub is_json: bool,
 }
 
 impl Dump {
@@ -24,6 +25,15 @@ impl Dump {
         if data.stream_to(&mut body_data).is_ok() {
             self.body = Some(String::from_utf8_lossy(&body_data).to_string());
         };
+
+        if self.is_json() {
+            self.is_json = true;
+        }
+    }
+
+    fn is_json(&self) -> bool {
+        let context_type = self.headers.get("Content-Type");
+        context_type == Some(&String::from("application/json"))
     }
 }
 
@@ -83,6 +93,7 @@ impl<'a, 'r> From<&'a Request<'r>> for Dump {
             body: None,
             body_params: None,
             time: time_str(),
+            is_json: false,
         }
     }
 }

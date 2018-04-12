@@ -40,7 +40,13 @@
             {{#if body }}
               <div class="collapse" id="collapseBody-{{ @index }}">
                 <div class="card card-body">
-                  {{ body }}
+                  {{#if is_json }}
+                    <pre class="json">
+                      {{ body }}
+                    </pre>
+                  {{else}}
+                    {{ body }}
+                  {{/if}}
                 </div>
               </div>
             {{/if}}
