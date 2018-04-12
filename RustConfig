@@ -1,1 +1,4 @@
-VERSION=nightly-2018-04-11
+VERSION="nightly-2018-04-11"
+CARGO_WEB_VERSION="0.6.10"
+
+# vim: set ft=sh
