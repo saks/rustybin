@@ -29,8 +29,10 @@ impl<'a, 'r> From<&'a Request<'r>> for Id {
 
 #[derive(Debug, Fail, Serialize)]
 pub enum Errors {
-    #[fail(display = "Id has already expired")] Expired,
-    #[fail(display = "Id is empty")] Empty,
+    #[fail(display = "Id has already expired")]
+    Expired,
+    #[fail(display = "Id is empty")]
+    Empty,
 }
 
 impl Id {

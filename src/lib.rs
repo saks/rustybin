@@ -13,9 +13,9 @@ extern crate serde_derive;
 extern crate rocket;
 extern crate rocket_contrib;
 
-mod render_with_layout;
-pub mod models;
 pub mod apps;
+pub mod models;
+mod render_with_layout;
 
 pub mod redis;
 pub mod server;

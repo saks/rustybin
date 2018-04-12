@@ -58,8 +58,8 @@ mod delete {
 
 mod find {
     use super::*;
-    use std::collections::HashMap;
     use rustybin::models::dump::Dump;
+    use std::collections::HashMap;
 
     use common;
 

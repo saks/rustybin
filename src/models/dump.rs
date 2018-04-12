@@ -1,10 +1,10 @@
 extern crate time;
 extern crate url;
 
-use rocket::Data;
-use rocket::request::Request;
-use std::collections::HashMap;
 use self::url::Url;
+use rocket::request::Request;
+use rocket::Data;
+use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Dump {

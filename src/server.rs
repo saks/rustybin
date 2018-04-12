@@ -1,8 +1,8 @@
 extern crate rocket;
 extern crate rocket_contrib;
 
-use rocket_contrib::Template;
 use apps;
+use rocket_contrib::Template;
 
 pub fn server() -> rocket::Rocket {
     rocket::ignite()

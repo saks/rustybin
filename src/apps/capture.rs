@@ -1,13 +1,13 @@
-use rocket::Route;
 use rocket::http::Method::*;
+use rocket::Route;
 
-use models::id::Id;
 use models::bin::Bin;
 use models::dump::Dump;
+use models::id::Id;
 
-use rocket::{Data, Request};
 use rocket::handler::Outcome;
 use rocket::http::Status;
+use rocket::{Data, Request};
 
 fn capture(request: &Request, data: Data) -> Outcome<'static> {
     let id = Id::from(request);

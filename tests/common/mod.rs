@@ -1,5 +1,5 @@
-extern crate rocket;
 extern crate redis;
+extern crate rocket;
 extern crate rustybin;
 
 use self::rocket::local::Client;

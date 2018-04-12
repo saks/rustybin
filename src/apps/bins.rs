@@ -1,9 +1,9 @@
 extern crate failure;
 
-use rocket::response::Redirect;
-use rocket::http::RawStr;
-use rocket::Route;
 use self::failure::Error;
+use rocket::http::RawStr;
+use rocket::response::Redirect;
+use rocket::Route;
 
 use rocket_contrib::Template;
 extern crate serde_json;

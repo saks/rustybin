@@ -1,10 +1,10 @@
 extern crate failure;
 extern crate redis;
 
-use std::time::Duration;
-use self::redis::{Client, Connection};
 use self::failure::Error;
+use self::redis::{Client, Connection};
 use std::env;
+use std::time::Duration;
 
 pub use self::redis::{transaction, Commands};
 

@@ -1,7 +1,7 @@
 extern crate serde;
 
-use rocket_contrib::Template;
 use self::serde::Serialize;
+use rocket_contrib::Template;
 
 #[derive(Serialize)]
 struct Context<'a, T: Serialize> {
@@ -18,10 +18,7 @@ impl<'a, T: Serialize> Context<'a, T> {
     }
 }
 
-pub fn render_with_layout<C: Serialize>(
-    template_name: &str,
-    context: C,
-) -> Template {
+pub fn render_with_layout<C: Serialize>(template_name: &str, context: C) -> Template {
     let context = Context::new(template_name, context);
     Template::render("layouts/index", context)
 }

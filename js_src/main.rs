@@ -10,21 +10,21 @@ extern crate failure_derive;
 use failure::Error;
 
 use stdweb::unstable::TryInto;
-use stdweb::web::{document, window, EventTarget, HtmlElement, IEventTarget,
-                  IHtmlElement, INode, IParentNode, Node};
+use stdweb::web::{document, window, EventTarget, HtmlElement, IEventTarget, IHtmlElement, INode,
+                  IParentNode, Node};
 
 use stdweb::web::event::{ClickEvent, IEvent};
 
 macro_rules! page_err {
-    ($error_variant:ident) => (
+    ($error_variant:ident) => {
         || -> Error { PageError::$error_variant {}.into() }
-    )
+    };
 }
 
 macro_rules! map_page_err {
-    ($error_variant:ident) => (
+    ($error_variant:ident) => {
         |_e| -> Error { PageError::$error_variant {}.into() }
-    )
+    };
 }
 
 #[derive(Debug, Fail)]
@@ -92,10 +92,7 @@ fn url_with_id(id: &str) -> Result<String, Error> {
     ))
 }
 
-fn dataset_key(
-    button: HtmlElement,
-    key: &'static str,
-) -> Result<String, Error> {
+fn dataset_key(button: HtmlElement, key: &'static str) -> Result<String, Error> {
     let dataset = button.dataset();
 
     dataset
