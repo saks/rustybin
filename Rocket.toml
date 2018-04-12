@@ -1,3 +1,6 @@
 [global]
 redis_url = "redis://127.0.0.1:6379"
-limits = { forms = 327680 }
+
+[global.limits]
+forms = 131072
+json = 131072

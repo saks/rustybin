@@ -19,8 +19,11 @@ pub struct Dump {
 }
 
 impl Dump {
-    pub fn add_data(&mut self, data: &Data) {
-        self.body = Some(String::from_utf8_lossy(data.peek()).to_string());
+    pub fn add_data(&mut self, data: Data) {
+        let mut body_data = Vec::new();
+        if data.stream_to(&mut body_data).is_ok() {
+            self.body = Some(String::from_utf8_lossy(&body_data).to_string());
+        };
     }
 }
 
@@ -49,7 +52,10 @@ fn headers(request: &Request) -> HashMap<String, String> {
     let mut headers = HashMap::new();
 
     for header in request.headers().iter() {
-        headers.insert(header.name().to_string(), header.value().to_string());
+        headers.insert(
+            header.name().to_string(),
+            header.value().to_string(),
+        );
     }
 
     headers

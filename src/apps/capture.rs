@@ -14,7 +14,7 @@ fn capture(request: &Request, data: Data) -> Outcome<'static> {
     if id.is_valid() {
         if id.check_fresh().is_ok() {
             let mut dump = Dump::from(request);
-            dump.add_data(&data);
+            dump.add_data(data);
 
             match Bin::capture(&id, &dump) {
                 Ok(_) => Outcome::from(request, "OK"),

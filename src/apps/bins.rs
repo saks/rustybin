@@ -68,7 +68,7 @@ struct IndexPage {
 impl IndexPage {
     fn success(bins: Vec<Bin>) -> Self {
         Self {
-            bins: bins,
+            bins,
             err: None,
         }
     }
