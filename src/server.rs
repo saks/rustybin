@@ -1,7 +1,7 @@
 extern crate rocket;
 extern crate rocket_contrib;
 
-use apps;
+use crate::apps;
 use rocket_contrib::Template;
 
 pub fn server() -> rocket::Rocket {

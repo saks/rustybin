@@ -6,9 +6,9 @@ use self::uuid::Uuid;
 
 extern crate serde_json;
 
-use models::dump::Dump;
-use models::id::Id;
-use redis::{get_redis_client, transaction, Commands};
+use crate::models::dump::Dump;
+use crate::models::id::Id;
+use crate::redis::{get_redis_client, transaction, Commands};
 
 const RECORD_TTL: u16 = 6000; // seconds
 

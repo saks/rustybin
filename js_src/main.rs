@@ -1,3 +1,4 @@
+#![feature(rust_2018_preview)]
 #[macro_use]
 extern crate stdweb;
 
@@ -10,8 +11,10 @@ extern crate failure_derive;
 use failure::Error;
 
 use stdweb::unstable::TryInto;
-use stdweb::web::{document, window, EventTarget, HtmlElement, IEventTarget, IHtmlElement, INode,
-                  IParentNode, Node};
+use stdweb::web::{
+    document, window, EventTarget, HtmlElement, IEventTarget, IHtmlElement, INode, IParentNode,
+    Node,
+};
 
 use stdweb::web::event::{ClickEvent, IEvent};
 
@@ -41,7 +44,8 @@ enum PageError {
 
 fn select_fake(text: &str) -> Result<(), Error> {
     let d = document();
-    let textarea = d.create_element("textarea")
+    let textarea = d
+        .create_element("textarea")
         .map_err(map_page_err!(NoTextareaCreated))?;
 
     js! { @(no_return)

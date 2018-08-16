@@ -86,7 +86,11 @@ mod find {
             uri: uri.clone(),
             headers: HashMap::new(),
             body: Some(String::from("GET")),
-            time: 0,
+            body_params: None,
+            cookies: HashMap::new(),
+            time: "0".to_string(),
+            is_json: false,
+            url_params: HashMap::new(),
         };
 
         // make sure it was 0 before first capture

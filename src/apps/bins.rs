@@ -8,8 +8,8 @@ use rocket::Route;
 use rocket_contrib::Template;
 extern crate serde_json;
 
-use models::Bin;
-use render_with_layout::render_with_layout;
+use crate::models::Bin;
+use crate::render_with_layout::render_with_layout;
 
 pub fn app() -> Vec<Route> {
     routes![index, show, create, delete]
@@ -67,10 +67,7 @@ struct IndexPage {
 
 impl IndexPage {
     fn success(bins: Vec<Bin>) -> Self {
-        Self {
-            bins,
-            err: None,
-        }
+        Self { bins, err: None }
     }
 
     fn from_err(err: &Error) -> Self {

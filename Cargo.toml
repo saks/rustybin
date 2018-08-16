@@ -1,7 +1,10 @@
+cargo-features = ["edition"]
+
 [package]
 name = "rustybin"
 version = "0.1.0"
 authors = ["Aliaksandr Rahalevich <saksmlz@gmail.com>"]
+edition = '2018'
 
 [features]
 
@@ -25,7 +28,7 @@ serde_json = "*"
 rocket = "*"
 rocket_codegen = "*"
 redis = "*"
-uuid = { version = "0.5.1", features = ["v4"] }
+uuid = { version = "*", features = ["v4"] }
 time = "*"
 url = "*"
 

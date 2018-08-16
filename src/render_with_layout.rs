@@ -18,10 +18,7 @@ impl<'a, T: Serialize> Context<'a, T> {
     }
 }
 
-pub fn render_with_layout<C: Serialize>(
-    template_name: &str,
-    context: C,
-) -> Template {
+pub fn render_with_layout<C: Serialize>(template_name: &str, context: C) -> Template {
     let context = Context::new(template_name, context);
     Template::render("layouts/index", context)
 }

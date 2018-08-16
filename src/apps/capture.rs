@@ -1,9 +1,9 @@
 use rocket::http::Method::*;
 use rocket::Route;
 
-use models::bin::Bin;
-use models::dump::Dump;
-use models::id::Id;
+use crate::models::bin::Bin;
+use crate::models::dump::Dump;
+use crate::models::id::Id;
 
 use rocket::handler::Outcome;
 use rocket::http::Status;

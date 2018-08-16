@@ -62,10 +62,7 @@ fn headers(request: &Request) -> HashMap<String, String> {
     let mut headers = HashMap::new();
 
     for header in request.headers().iter() {
-        headers.insert(
-            header.name().to_string(),
-            header.value().to_string(),
-        );
+        headers.insert(header.name().to_string(), header.value().to_string());
     }
 
     headers

@@ -7,7 +7,7 @@ use rocket::request::Request;
 
 extern crate uuid;
 use self::uuid::Uuid;
-use redis::{get_redis_client, Commands};
+use crate::redis::{get_redis_client, Commands};
 
 #[derive(Debug, Default)]
 pub struct Id {
