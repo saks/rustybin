@@ -1,12 +1,9 @@
-extern crate time;
-extern crate url;
-
-use self::url::Url;
+use rocket::data::{Data, ToByteUnit};
 use rocket::request::Request;
-use rocket::Data;
 use std::collections::HashMap;
+use url::Url;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct Dump {
     pub method: String,
     pub uri: String,
@@ -20,11 +17,18 @@ pub struct Dump {
 }
 
 impl Dump {
-    pub fn add_data(&mut self, data: Data) {
+    pub async fn add_data(&mut self, data: Data<'_>) {
         let mut body_data = Vec::new();
-        if data.stream_to(&mut body_data).is_ok() {
+
+        // TODO: handle errors
+        if data
+            .open(512.kibibytes())
+            .stream_to(&mut body_data)
+            .await
+            .is_ok()
+        {
             self.body = Some(String::from_utf8_lossy(&body_data).to_string());
-        };
+        }
 
         if self.is_json() {
             self.is_json = true;
@@ -38,16 +42,18 @@ impl Dump {
 }
 
 fn time_str() -> String {
-    let now = time::get_time();
-    let utc = time::at_utc(now);
+    use time::{format_description::well_known::Rfc3339, OffsetDateTime};
 
-    utc.rfc3339().to_string()
+    OffsetDateTime::now_utc()
+        .format(&Rfc3339)
+        .expect("to format time")
 }
 
 fn url_params(request: &Request) -> HashMap<String, String> {
     let mut url_params = HashMap::new();
+    let origin = request.uri();
 
-    let uri = "http://a.b/".to_string() + request.uri().as_str();
+    let uri = format!("http://a.b/{origin}");
 
     if let Ok(parsed_uri) = Url::parse(&uri) {
         for (key, value) in parsed_uri.query_pairs() {
@@ -81,9 +87,11 @@ fn cookies(request: &Request) -> HashMap<String, String> {
 
 impl<'a, 'r> From<&'a Request<'r>> for Dump {
     fn from(request: &'a Request<'r>) -> Self {
+        // cut first 37 chars out
+        let uri = request.uri().path().to_string()[37..].to_string();
         Self {
             method: request.method().to_string(),
-            uri: String::from(&request.uri().path()[37..]), // cut first 37 chars out
+            uri,
             headers: headers(&request),
             url_params: url_params(&request),
             cookies: cookies(&request),

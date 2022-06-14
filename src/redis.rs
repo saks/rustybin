@@ -1,12 +1,9 @@
-extern crate failure;
-extern crate redis;
-
-use self::failure::Error;
-use self::redis::{Client, Connection};
+use failure::Error;
+use redis::{Client, Connection};
 use std::env;
 use std::time::Duration;
 
-pub use self::redis::{transaction, Commands};
+pub use ::redis::{transaction, Commands};
 
 pub fn get_redis_client() -> Result<Connection, Error> {
     let url = env::var("REDIS_URL")?;

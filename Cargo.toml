@@ -1,45 +1,48 @@
-cargo-features = ["edition"]
-
 [package]
 name = "rustybin"
 version = "0.1.0"
 authors = ["Aliaksandr Rahalevich <saksmlz@gmail.com>"]
-edition = '2018'
+edition = '2021'
 
 [features]
 
 default = ["server"]
 
-server = ["rocket_contrib"]
+server = ["rocket_dyn_templates"]
 
 [[bin]]
 name = "rustybin"
 path = "src/main.rs"
 
-[[bin]]
-name = "application"
-path = "js_src/main.rs"
+# [[bin]]
+# name = "application"
+# path = "js_src/main.rs"
+#
+# [target.wasm32-unknown-unknown.dependencies]
+# stdweb = "*"
 
-[target.wasm32-unknown-unknown.dependencies]
-stdweb = "*"
+# [cargo-web]
+# # Asserts the minimum required version of `cargo-web` necessary
+# # to compile this crate; supported since 0.6.0.
+# minimum-version = "0.6.0"
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]
 serde_json = "*"
-rocket = "*"
-rocket_codegen = "*"
-redis = "*"
+rocket = { version = "0.5.0-rc.2", features = ["json"] }
+rocket_dyn_templates = { version = "0.1.0-rc.2", features = ["handlebars"], optional = true }
+# rocket_codegen = "*"
+redis = "0.21"
 uuid = { version = "*", features = ["v4"] }
-time = "*"
-url = "*"
+time = { version = "0.3", features = ["serde-well-known", "formatting"] }
+url = "2.2"
 
 [dependencies]
-serde = "*"
-serde_derive = "*"
+serde = { version = "1", features = ["derive"] }
 failure = "*"
 failure_derive = "*"
 
-[target.'cfg(target_arch = "x86_64")'.dependencies.rocket_contrib]
-version = "*"
-default-features = false
-features = ["handlebars_templates"]
-optional = true
+# [target.'cfg(target_arch = "x86_64")'.dependencies.rocket_contrib]
+# version = "*"
+# default-features = false
+# features = ["handlebars_templates"]
+# optional = true

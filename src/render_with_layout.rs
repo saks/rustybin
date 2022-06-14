@@ -1,7 +1,5 @@
-extern crate serde;
-
-use self::serde::Serialize;
-use rocket_contrib::Template;
+use rocket_dyn_templates::Template;
+use serde::Serialize;
 
 #[derive(Serialize)]
 struct Context<'a, T: Serialize> {

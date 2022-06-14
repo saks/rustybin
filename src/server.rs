@@ -1,13 +1,13 @@
-extern crate rocket;
-extern crate rocket_contrib;
+use rocket::launch;
 
 use crate::apps;
-use rocket_contrib::Template;
+use rocket_dyn_templates::Template;
 
-pub fn server() -> rocket::Rocket {
-    rocket::ignite()
+#[launch]
+pub fn server() -> _ {
+    rocket::build()
         .attach(Template::fairing())
         .mount("/static", apps::static_files::app())
-        .mount("/", apps::capture::app())
         .mount("/", apps::bins::app())
+    // .mount("/", apps::capture::app())
 }

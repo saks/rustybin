@@ -1,12 +1,9 @@
-extern crate failure;
-
-use self::failure::Error;
-use rocket::http::RawStr;
+use failure::Error;
 use rocket::response::Redirect;
 use rocket::Route;
-
-use rocket_contrib::Template;
-extern crate serde_json;
+use rocket::{delete, get, post, routes};
+use rocket_dyn_templates::Template;
+use serde::Serialize;
 
 use crate::models::Bin;
 use crate::render_with_layout::render_with_layout;
@@ -16,7 +13,7 @@ pub fn app() -> Vec<Route> {
 }
 
 #[get("/", rank = 2)]
-fn index() -> Template {
+async fn index() -> Template {
     let page = match Bin::all() {
         Ok(bins) => IndexPage::success(bins),
         Err(err) => IndexPage::from_err(&err),
@@ -25,7 +22,7 @@ fn index() -> Template {
 }
 
 #[post("/", rank = 2)]
-fn create() -> Redirect {
+async fn create() -> Redirect {
     match Bin::create() {
         Ok(_bin) => Redirect::to("/"),
         Err(err) => {
@@ -36,7 +33,7 @@ fn create() -> Redirect {
 }
 
 #[get("/__rustybin/<id>", rank = 2)]
-fn show(id: &RawStr) -> Template {
+async fn show(id: &str) -> Template {
     match Bin::find(id) {
         Ok(bin) => render_with_layout("bins/show", bin),
         Err(err) => render_with_layout(
@@ -49,7 +46,7 @@ fn show(id: &RawStr) -> Template {
 }
 
 #[delete("/__rustybin/<id>", rank = 2)]
-fn delete(id: &RawStr) -> Redirect {
+async fn delete(id: &str) -> Redirect {
     let _ = Bin::delete(id);
     Redirect::to("/")
 }

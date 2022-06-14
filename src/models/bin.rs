@@ -1,10 +1,6 @@
-extern crate failure;
-extern crate uuid;
-
-use self::failure::Error;
-use self::uuid::Uuid;
-
-extern crate serde_json;
+use failure::{Error, Fail};
+use serde::Serialize;
+use uuid::Uuid;
 
 use crate::models::dump::Dump;
 use crate::models::id::Id;
@@ -30,10 +26,10 @@ impl Bin {
     }
 
     pub fn create() -> Result<Self, Error> {
-        let redis_client = get_redis_client()?;
+        let mut redis_client = get_redis_client()?;
         let key = Uuid::new_v4().to_string();
 
-        let _: () = transaction(&redis_client, &[&key], |pipe| {
+        let _: () = transaction(&mut redis_client, &[&key], |conn, pipe| {
             pipe.cmd("DEL")
                 .arg(&key)
                 .cmd("LPUSH")
@@ -42,20 +38,20 @@ impl Bin {
                 .cmd("EXPIRE")
                 .arg(&key)
                 .arg(RECORD_TTL)
-                .query(&redis_client)
+                .query(conn)
         })?;
 
         Ok(Self::new(key))
     }
 
     pub fn delete(id: &str) -> Result<(), Error> {
-        let redis_client = get_redis_client()?;
+        let mut redis_client = get_redis_client()?;
         let _: () = redis_client.del(id)?;
         Ok(())
     }
 
     pub fn find(id: &str) -> Result<Self, Error> {
-        let redis_client = get_redis_client()?;
+        let mut redis_client = get_redis_client()?;
 
         let exist_res: u8 = redis_client.exists(id)?;
         if 0 == exist_res {
@@ -78,7 +74,7 @@ impl Bin {
     }
 
     pub fn all() -> Result<Vec<Self>, Error> {
-        let redis_client = get_redis_client()?;
+        let mut redis_client = get_redis_client()?;
         let all_keys: Vec<String> = redis_client.keys("**")?;
 
         Ok(all_keys.into_iter().map(Self::new).collect())
@@ -86,18 +82,18 @@ impl Bin {
 
     pub fn capture(id: &Id, dump: &Dump) -> Result<(), Error> {
         let id = id.to_string();
-        let redis_client = get_redis_client()?;
+        let mut redis_client = get_redis_client()?;
 
         let json = serde_json::to_string(&dump)?;
 
-        let _: () = transaction(&redis_client, &[&id], |pipe| {
+        let _: () = transaction(&mut redis_client, &[&id], |conn, pipe| {
             pipe.cmd("LPUSH")
                 .arg(&id)
                 .arg(&json)
                 .cmd("EXPIRE")
                 .arg(&id)
                 .arg(RECORD_TTL)
-                .query(&redis_client)
+                .query(conn)
         })?;
 
         Ok(())

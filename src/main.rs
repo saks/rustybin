@@ -1,6 +1,4 @@
-#![feature(rust_2018_preview)]
-extern crate rustybin;
-
-fn main() {
-    rustybin::server().launch();
+#[rocket::main]
+async fn main() {
+    let _x = rustybin::server().launch().await.unwrap();
 }

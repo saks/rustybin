@@ -1,14 +1,12 @@
-#![feature(rust_2018_preview)]
-#[macro_use]
-extern crate stdweb;
+use stdweb::{self, console, js};
 
-extern crate failure;
-extern crate serde;
+use failure;
 
-#[macro_use]
-extern crate failure_derive;
+// #[macro_use]
+// extern crate failure_derive;
 
 use failure::Error;
+use failure_derive::Fail;
 
 use stdweb::unstable::TryInto;
 use stdweb::web::{
@@ -73,7 +71,7 @@ fn select_fake(text: &str) -> Result<(), Error> {
         .unwrap() // selector syntax error
         .map(|body| {
             body.append_child(&textarea);
-            js!{ @(no_return)
+            js! { @(no_return)
                 @{textarea}.select();
                 document.execCommand("copy");
                 window.getSelection().removeAllRanges();
@@ -85,8 +83,8 @@ fn select_fake(text: &str) -> Result<(), Error> {
 
 fn url_with_id(id: &str) -> Result<String, Error> {
     let location = window().location().ok_or_else(page_err!(NoLocationError))?;
-    let protocol: String = js!(return @{&location}.protocol).try_into()?;
-    let host: String = js!(return @{&location}.host).try_into()?;
+    let protocol: String = TryInto::try_into(js!(return @{&location}.protocol))?;
+    let host: String = TryInto::try_into(js!(return @{&location}.host))?;
 
     Ok(format!(
         "{protocol}//{host}/{id}",
@@ -106,7 +104,7 @@ fn dataset_key(button: HtmlElement, key: &'static str) -> Result<String, Error> 
 
 fn copy(e: ClickEvent) -> Result<(), Error> {
     let target: EventTarget = e.current_target().expect("no click target!");
-    let button: HtmlElement = target.try_into()?;
+    let button: HtmlElement = TryInto::try_into(target)?;
 
     let id = dataset_key(button, "id")?;
     let url = url_with_id(&id)?;

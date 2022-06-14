@@ -19,9 +19,9 @@ fn root_page_has_create_button() {
     common::reset_db();
     let client = common::client();
 
-    let mut response = client.get("/").dispatch();
+    let response = client.get("/").dispatch();
 
-    let body = response.body_string().unwrap();
+    let body = response.into_string().unwrap();
     assert!(body.contains("create new bin"));
 }
 
@@ -44,6 +44,8 @@ fn it_should_redirect_to_the_new_bin_page() {
     let response = client.post("/").dispatch();
     let headers = response.headers();
     let location = headers.get("Location").next().unwrap();
+
+    dbg!(&location);
 
     let last_bin = get_last_bin().unwrap();
     let expected_url = format!("/__rustybin/{}", last_bin.id);
@@ -68,7 +70,7 @@ fn it_should_create_only_one_new_bin() {
 
 mod capturing {
     use super::*;
-    use rocket::local::LocalResponse;
+    use rocket::local::blocking::LocalResponse;
 
     #[test]
     fn it_should_accept_get() {
@@ -94,9 +96,9 @@ mod capturing {
     }
 
     fn assert_response_is_success(response: LocalResponse) {
-        let mut response = response;
+        let response = response;
 
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(Some("OK".into()), response.body_string());
+        assert_eq!(Some("OK".into()), response.into_string());
     }
 }
